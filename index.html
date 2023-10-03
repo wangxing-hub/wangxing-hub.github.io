@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+  <head>
+      <meta charset="utf-8" />
+      <title>todo</title>
+  </head>
+
+  <body onload="getCurrentDate()">
+    <div class="container">
+      <div class="my-text">
+        <h1>待办事项</h1>
+        <div id="currentDate">2023.9.24</div>
+        <ol>
+          <li><input type="text"></li>
+          <li><input type="text"></li>
+          <li><input type="text"></li>
+          <li><input type="text"></li>
+          <li><input type="text"></li>
+        </ol>
+        <button>新增</button>
+        <button>重置</button>
+        <button onclick="getCurrentDate()">刷新时间</button>
+      </div>
+    </div>
+
+  </body>
+</html>
+
+<script>
+  function getCurrentDate() {
+    var date = new Date();
+    document.getElementById("currentDate").innerHTML=date.toLocaleDateString();
+  }
+
+  document.querySelector("html").addEventListener("click", function() {
+    localStorage.setItem("name","jack")
+    // alert("别戳我")
+    let myName = prompt("请输入你的名字。")
+    console.log(myName)
+  })
+</script>
+
+<style>
+
+  body {
+    background-color: #282c34;
+  }
+  input {
+    background-color: bisque;
+    margin: 10px;
+    margin-left: 20px;
+    /* 去除边框后点击input还是会显示输入框的格式，加上这个属性后就不会再显示 */
+    outline:none;
+    font-size: 15px;
+  }
+  .container {
+    height: 800px;
+    width: 700px;
+    overflow: hidden;
+    margin: 100px auto;
+    border: 1px solid green;
+    padding: 0px;
+    /* 边框角弧度 */
+    border-radius: 5%;
+    /* background-color: skyblue; */
+    /* overflow-y: scroll; */
+  }
+  .my-text {
+    margin: 30px;
+    color: bisque;
+    font-size: 15px;
+  }
+    /* .custom-body {
+    background-image: url(a.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+  } */
+</style>
