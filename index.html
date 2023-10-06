@@ -5,21 +5,23 @@
       <title>todo</title>
   </head>
 
-  <body onload="getCurrentDate()">
+  <body id="body">
+
+    <!-- 1. 换肤部分 -->
+    <div class="skinColor">
+      <button onclick="customBodyBgColor()">自定义背景色</button>
+      <button onclick="defaultBodyBgColor()">默认背景色</button>
+    </div>
+
+    <!-- 2. todo部分 -->
     <div class="container">
       <div class="my-text">
         <h1>待办事项</h1>
-        <div id="currentDate">2023.9.24</div>
-        <ol>
-          <li><input type="text"></li>
-          <li><input type="text"></li>
-          <li><input type="text"></li>
-          <li><input type="text"></li>
-          <li><input type="text"></li>
+        <div id="currentTime">2023.9.24</div>
+        <ol id="list" type="a">
+          <li><input type="text" class="todoInput"><button class="del">删除</button></li>
         </ol>
-        <button>新增</button>
-        <button>重置</button>
-        <button onclick="getCurrentDate()">刷新时间</button>
+        <button id="addTodo">新增</button>
       </div>
     </div>
 
@@ -27,17 +29,68 @@
 </html>
 
 <script>
-  function getCurrentDate() {
-    var date = new Date();
-    document.getElementById("currentDate").innerHTML=date.toLocaleDateString();
+  // 在页面加载完全完毕后(包括图片、CSS文件等)立刻执行的脚本代码
+  window.onload = function() {
+    refreshCurrentTime()
+    localStorage.setItem("defaultColor","#282c34")
   }
 
-  //document.querySelector("html").addEventListener("click", function() {
-    // localStorage.setItem("name","jack")
-    // alert("别戳我")
-    // let myName = prompt("请输入你的名字。")
-    // console.log(myName)
-  // })
+  let list = document.getElementById("list")
+  let addTodo = document.getElementById("addTodo")
+  let refreshTime = document.getElementById("refreshTime")
+
+  // 新增按钮的点击事件
+  addTodo.onclick = function() {
+    console.log(event.target.value)
+    let li = document.createElement("li")
+    li.innerHTML = '<input type="text" class="todoInput"><button class="del">删除</button>'
+    list.appendChild(li)
+  }
+
+
+  // 事件委派
+  // 将事件统一绑定给元素的共同祖先元素，当后代元素的事件触发时，
+  // 会一直冒泡到祖先元素，从而通过祖先元素的响应函数来处理事件。
+  // 利用冒泡，通过委派可以减少事件绑定次数，提高程序性能
+  list.onclick = function(event) {
+    event = event || window.event
+    if(event.target.className == "todoInput") {
+      console.log(event.target.value)
+      // alert(event.target.innerHTML)
+    }
+
+    if(event.target.innerHTML == "删除") {
+      if(confirm("你确定要删除这一条todo吗? ")) {
+        // console.log(event.target)
+        // console.log(event.target.parentElement)
+        // console.log(event.target.parent)
+        // console.log(list)
+        list.removeChild(event.target.parentElement)
+      }
+    }
+  }
+
+  // 展示当前时间
+  function refreshCurrentTime() {
+    let date = new Date()
+    document.getElementById("currentTime").innerHTML = date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+  }
+
+  // 每隔1s刷新一次时间
+  setInterval("refreshCurrentTime();", 1000);
+
+  // 自定义修改背景颜色
+  function customBodyBgColor() {
+    let color = prompt("请输入自定义背景颜色：","black")
+    let body = document.getElementById("body")
+    body.style.backgroundColor=color
+  }
+
+  // 恢复默认背景颜色
+  function defaultBodyBgColor() {
+    let body = document.getElementById("body")
+    body.style.backgroundColor=localStorage.getItem("defaultColor")
+  }
 </script>
 
 <style>
@@ -45,12 +98,13 @@
   body {
     background-color: #282c34;
   }
-  input {
-    background-color: bisque;
+  .todoInput {
+    background-color: burlywood;
     margin: 10px;
     margin-left: 20px;
-    /* 去除边框后点击input还是会显示输入框的格式，加上这个属性后就不会再显示 */
-    outline:none;
+    border: 0px;
+    /* 不显示input输入框边框 */
+    /* outline:none; */
     font-size: 15px;
   }
   .container {
@@ -58,7 +112,7 @@
     width: 700px;
     overflow: hidden;
     margin: 100px auto;
-    border: 1px solid green;
+    border: 1px solid royalblue;
     padding: 0px;
     /* 边框角弧度 */
     border-radius: 5%;
@@ -67,10 +121,14 @@
   }
   .my-text {
     margin: 30px;
-    color: bisque;
+    color: burlywood;
     font-size: 15px;
   }
-    /* .custom-body {
+  .skinColor {
+    position: relative;
+    text-align: right;
+  }
+  /* .custom-body {
     background-image: url(a.jpg);
     background-size: cover;
     background-repeat: no-repeat;
