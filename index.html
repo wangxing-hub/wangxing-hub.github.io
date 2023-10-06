@@ -73,7 +73,9 @@
   // 展示当前时间
   function refreshCurrentTime() {
     let date = new Date()
-    document.getElementById("currentTime").innerHTML = date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+    let currentDate = date.toLocaleDateString().replaceAll('/', '-')
+    let currentTime = date.toLocaleTimeString()
+    document.getElementById("currentTime").innerHTML = currentDate + ' ' + currentTime
   }
 
   // 每隔1s刷新一次时间
